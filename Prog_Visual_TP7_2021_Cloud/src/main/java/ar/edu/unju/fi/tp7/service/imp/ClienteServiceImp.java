@@ -22,7 +22,7 @@ public class ClienteServiceImp implements IClienteService {
 	@Override
 	public void generarTablaCliente() {
 		clientes = TablaCliente.listaClientes;
-		clientes.add(new Cliente("Documento", 20159753, "Maria Diaz", "email@hot.com","password", LocalDate.of(1980,05,20), 20, 388, 5123963, LocalDate.of(2020, 10,20)));
+		//clientes.add(new Cliente("Documento", 20159753, "Maria Diaz", "email@hot.com","password", LocalDate.of(1980,05,20), 20, 388, 5123963, LocalDate.of(2020, 10,20)));
 		LOGGER.info("METHOD: Agregamos un cliente manualmente a la tabla");
 		LOGGER.info("RESULT: " + clientes);
 	}
