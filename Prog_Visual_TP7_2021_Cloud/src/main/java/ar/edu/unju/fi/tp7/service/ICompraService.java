@@ -11,5 +11,4 @@ public interface ICompraService {
 	public void guardarCompra(Compra compra);
 	
 	public List<Compra> obtenerCompras();
-
 }
