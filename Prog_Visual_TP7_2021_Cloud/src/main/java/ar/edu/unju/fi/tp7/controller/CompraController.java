@@ -1,6 +1,7 @@
 package ar.edu.unju.fi.tp7.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 /*import org.springframework.beans.factory.annotation.Qualifier;*/
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,9 +22,11 @@ public class CompraController {
 	private Compra compra;
 	
 	@Autowired
+	@Qualifier("productoServiceMysql")
 	private IProductoService productoService;
 	
 	@Autowired
+	@Qualifier("compraServiceMysql")
 	private ICompraService compraService;
 	
 	@GetMapping("/compras")
