@@ -4,9 +4,11 @@ import java.time.LocalDate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.springframework.format.annotation.DateTimeFormat;
@@ -29,6 +31,9 @@ public class Cuenta {
 	
 	@Column(name = "cue_estado", nullable = false)
 	private String estado;
+	
+	@OneToOne(mappedBy = "cuenta", fetch = FetchType.LAZY)
+	private Cliente cliente;
 	
 	
 	public Cuenta() {
@@ -66,4 +71,20 @@ public class Cuenta {
 	public void setEstado(String estado) {
 		this.estado = estado;
 	}
+
+	public Cliente getCliente() {
+		return cliente;
+	}
+
+	public void setCliente(Cliente cliente) {
+		this.cliente = cliente;
+	}
+
+	@Override
+	public String toString() {
+		return "Cuenta [id=" + id + ", saldo=" + saldo + ", fechaCreacion=" + fechaCreacion + ", estado=" + estado
+				+ ", cliente=" + cliente + "]";
+	}
+
 }
+

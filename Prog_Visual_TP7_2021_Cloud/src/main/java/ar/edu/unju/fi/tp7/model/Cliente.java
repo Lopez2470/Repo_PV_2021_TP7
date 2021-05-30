@@ -6,13 +6,17 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.Period;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Component;
 
@@ -56,13 +60,18 @@ public class Cliente {
 	@Column(name = "cli_fechaUltimaCompra", nullable = false)
 	private LocalDate fechaUltimaCompra;
 	
+	@Autowired
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "cue_id")
+	private Cuenta cuenta;
+	
 	public Cliente() {
 		// TODO Auto-generated constructor stub
 	}
-	
 
 	public Cliente(String tipoDocumento, int nroDocumento, String apellidoNombre, String email, String password,
-			LocalDate fechaNacimiento, int edad, int codigoAreaTelefono, int nroTelefono, LocalDate fechaUltimaCompra) {
+			LocalDate fechaNacimiento, int edad, int codigoAreaTelefono, int nroTelefono, LocalDate fechaUltimaCompra,
+			Cuenta cuenta) {
 		super();
 		this.tipoDocumento = tipoDocumento;
 		this.nroDocumento = nroDocumento;
@@ -74,7 +83,9 @@ public class Cliente {
 		this.codigoAreaTelefono = codigoAreaTelefono;
 		this.nroTelefono = nroTelefono;
 		this.fechaUltimaCompra = fechaUltimaCompra;
+		this.cuenta = cuenta;
 	}
+
 
 	public Long getId() {
 		return id;
@@ -165,6 +176,15 @@ public class Cliente {
 		this.fechaUltimaCompra = fechaUltimaCompra;
 	}
 	
+	
+	public Cuenta getCuenta() {
+		return cuenta;
+	}
+
+	public void setCuenta(Cuenta cuenta) {
+		this.cuenta = cuenta;
+	}
+
 	public int calcularEdad() {
 		LocalDate hoy = LocalDate.now();
 		Period periodo = Period.between(this.fechaNacimiento, hoy);
@@ -222,5 +242,12 @@ public class Cliente {
         return tiempoProximoCumple;
 	}
 
-
+	@Override
+	public String toString() {
+		return "Cliente [id=" + id + ", tipoDocumento=" + tipoDocumento + ", nroDocumento=" + nroDocumento
+				+ ", apellidoNombre=" + apellidoNombre + ", email=" + email + ", password=" + password
+				+ ", fechaNacimiento=" + fechaNacimiento + ", edad=" + edad + ", codigoAreaTelefono="
+				+ codigoAreaTelefono + ", nroTelefono=" + nroTelefono + ", fechaUltimaCompra=" + fechaUltimaCompra
+				+ ", cuenta=" + cuenta + "]";
+	}	
 }
