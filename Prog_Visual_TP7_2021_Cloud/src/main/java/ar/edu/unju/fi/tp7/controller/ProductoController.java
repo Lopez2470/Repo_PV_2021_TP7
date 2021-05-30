@@ -1,12 +1,16 @@
 package ar.edu.unju.fi.tp7.controller;
 
+import java.util.Optional;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -18,15 +22,21 @@ public class ProductoController {
 	private static final Log  LOGGER = LogFactory.getLog(ProductoController.class);
 	
 	@Autowired
+	private Producto producto;
+	
+	@Autowired
+	@Qualifier("productoServiceMysql")
 	IProductoService productoService;
+	
 	/*Pagina para ingresar los campos de Producto*/
 	@GetMapping("/producto")
 	public String getProductoFormPage(Model model) {
-		model.addAttribute("producto", productoService.getProducto());
+		model.addAttribute(producto);
 		LOGGER.info("METHOD: getProductoFormPage()");
 		LOGGER.info("RESULT: Visualiza la pagina producto-nuevo.html");
 		return "producto-nuevo";
 	}
+		
 	/*Pagina que informa el alta del producto nuevo*/
 	@PostMapping("/producto/guardar")
 	public ModelAndView guardarProducto(@ModelAttribute("producto") Producto producto){
@@ -36,26 +46,6 @@ public class ProductoController {
 		return modelView;
 	}
 	
-
-	/*Pagina para detallar el ultimo producto dado de alta*/
-	@GetMapping("/producto/ultimo")
-	public ModelAndView getUltimoProductoPage() {
-		ModelAndView modelView = new ModelAndView("producto-ultimo");
-		modelView.addObject("producto", productoService.getUltimoProducto());
-		LOGGER.info("METHOD: getUltimoProductoPage()");
-		LOGGER.info("RESULT: Visualiza la pagina producto-ultimo.html");
-		return modelView;
-	}
-	
-	/*Pagina que visualiza los productos ingresados*/
-	/*@GetMapping("/producto/listado")
-	public String getProductoListadoPage(Model model){
-		model.addAttribute("productos", productoService.getAllProductos());
-		LOGGER.info("METHOD: getProductoListadoPage()");
-		LOGGER.info("RESULT: Visualiza la pagina producto-listado.html");
-		return"producto-listado";
-	}
-*/
 	@GetMapping("/producto/listado")
 	public ModelAndView getProductoListadoPage() {
 		ModelAndView modelView = new ModelAndView("producto-listado");
@@ -66,10 +56,23 @@ public class ProductoController {
 		return modelView;
 	}
 	
-
 	@GetMapping("/home")
 	public String getPageHome() {
 		return("home");
 	}
+	
+	@GetMapping("/producto/editar/{id}")
+	public ModelAndView getProductoEditPage(@PathVariable(value = "id") Long id) {
+		ModelAndView modelView = new ModelAndView("producto-nuevo");
+		Optional<Producto> producto = productoService.getProductoPorId(id);
+		modelView.addObject("producto",producto);
+		return modelView;
+	}
+	
+	@GetMapping("/producto/eliminar/{id}")
+	public ModelAndView getProductoEliminar(@PathVariable(value = "id") Long id){
+		ModelAndView modelView = new ModelAndView("redirect:/producto/listado");
+		productoService.eliminarProducto(id);
+		return modelView;
+	}	
 }
-
